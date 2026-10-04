@@ -8,16 +8,31 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
-import type { Banner } from "@/@types/admin";
+import type { BannerDTO, BannerInput } from "@/lib/types/banner";
 
 export function BannerForm({
   banner,
+  saving,
   onSave,
 }: {
-  banner: Banner;
-  onSave: (b: Banner) => void;
+  banner: BannerDTO;
+  saving?: boolean;
+  onSave: (b: BannerInput) => Promise<boolean>;
 }) {
-  const [form, setForm] = useState(banner);
+  const [form, setForm] = useState<BannerInput>({
+    message: banner.message,
+    active: banner.active,
+    expiresAt: banner.expiresAt,
+  });
+  const [saved, setSaved] = useState(false);
+
+  // datetime-local needs "YYYY-MM-DDTHH:mm", DB stores ISO.
+  const toLocal = (iso: string) => {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
 
   return (
     <Card className="min-w-0 overflow-hidden p-4 sm:p-5">
@@ -42,8 +57,13 @@ export function BannerForm({
             <Input
               id="banner-expiry"
               type="datetime-local"
-              value={form.expiry}
-              onChange={(e) => setForm({ ...form, expiry: e.target.value })}
+              value={toLocal(form.expiresAt)}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  expiresAt: new Date(e.target.value).toISOString(),
+                })
+              }
             />
           </div>
           <div className="grid gap-2">
@@ -61,10 +81,16 @@ export function BannerForm({
 
         <div>
           <Button
-            onClick={() => onSave(form)}
+            onClick={async () => {
+              const ok = await onSave(form);
+              if (!ok) return;
+              setSaved(true);
+              setTimeout(() => setSaved(false), 1500);
+            }}
+            disabled={saving}
             className="bg-green-800 text-white hover:bg-green-700"
           >
-            Save banner
+            {saving ? "Saving..." : saved ? "Saved" : "Save banner"}
           </Button>
         </div>
       </div>

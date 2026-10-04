@@ -3,15 +3,10 @@
 import { useState } from "react";
 import { Siren, X } from "lucide-react";
 
-// Temporary flag - later replaced by admin-controlled data with expiry.
-const SHOW_URGENT = true;
-const URGENT_MESSAGE = "হাওর এক্সপ্রেস ৪৫ মিনিট বিলম্বে — শ্যামগঞ্জের কাছে ট্র্যাক মেরামত।";
-const URGENT_UNTIL = "until 5/10/2026, 2:25:00 pm";
-
-export function UrgentBanner() {
+export function UrgentBanner({ message, until }: { message: string; until: string }) {
   const [dismissed, setDismissed] = useState(false);
 
-  if (!SHOW_URGENT || dismissed) return null;
+  if (dismissed) return null;
 
   return (
     <div className="max-body pt-4">
@@ -32,9 +27,9 @@ export function UrgentBanner() {
               <span className="rounded-full bg-red-600 px-2.5 py-0.5 font-bold text-white">
                 URGENT
               </span>
-              <span className="text-muted-foreground">• {URGENT_UNTIL}</span>
+              <span className="text-muted-foreground">• {until}</span>
             </p>
-            <p className="mt-1 font-semibold">{URGENT_MESSAGE}</p>
+            <p className="mt-1 font-semibold">{message}</p>
           </div>
 
           <button

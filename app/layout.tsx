@@ -4,10 +4,11 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { DesktopSidebar } from "@/components/shared/desktop-sidebar"
 import { MobileNav } from "@/components/shared/mobile-nav"
-import { UrgentBanner } from "@/components/shared/urgent-banner"
-import { cn } from "@/lib/utils";
+import { UrgentBannerSlot } from "@/components/shared/urgent-banner-slot"
+import { cn } from "@/lib/utils"
+import { Suspense } from "react"
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'})
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -23,14 +24,21 @@ export default function RootLayout({
     <html
       lang="bn"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
+      className={cn(
+        "antialiased",
+        fontMono.variable,
+        "font-sans",
+        geist.variable
+      )}
     >
       <body>
         <ThemeProvider>
           <div className="min-h-svh md:flex">
             <DesktopSidebar />
             <div className="min-w-0 flex-1 pb-20 md:pb-0">
-              <UrgentBanner />
+              <Suspense fallback={null}>
+                <UrgentBannerSlot />
+              </Suspense>
               <main>{children}</main>
             </div>
           </div>

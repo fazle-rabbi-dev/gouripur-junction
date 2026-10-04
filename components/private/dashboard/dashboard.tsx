@@ -6,7 +6,9 @@ import { Info, LayoutGrid, Megaphone, MessagesSquare } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { addTrain, deleteTrain, updateTrain } from "@/lib/actions/trains";
+import { saveBanner } from "@/lib/actions/banner";
 import { useAdminData } from "@/hooks/use-admin-data";
+import type { BannerDTO, BannerInput } from "@/lib/types/banner";
 import type { TrainDTO, TrainInput } from "@/lib/types/train";
 import { AdminHeader } from "./admin-header"
 import { AdminStats } from "./admin-stats"
@@ -36,10 +38,26 @@ function toInput(t: TrainDTO): TrainInput {
   };
 }
 
-export function Dashboard({ initialTrains }: { initialTrains: TrainDTO[] }) {
-  // Banner + posts still come from local mock hook; trains come from DB.
-  const { banner, setBanner, posts, setPosts } = useAdminData();
+export function Dashboard({
+  initialTrains,
+  initialBanner,
+}: {
+  initialTrains: TrainDTO[];
+  initialBanner: BannerDTO | null;
+}) {
+  // Posts still come from local mock hook; trains + banner come from DB.
+  const { posts, setPosts } = useAdminData();
   const [trains, setTrains] = useState<TrainDTO[]>(initialTrains);
+  const [banner, setBanner] = useState<BannerDTO>(
+    initialBanner ?? {
+      _id: "",
+      message: "",
+      active: false,
+      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      createdAt: "",
+      updatedAt: "",
+    }
+  );
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editing, setEditing] = useState<TrainDTO | null>(null)
   const [deleting, setDeleting] = useState<TrainDTO | null>(null)
@@ -83,6 +101,19 @@ export function Dashboard({ initialTrains }: { initialTrains: TrainDTO[] }) {
     }
     setTrains((prev) => prev.filter((t) => t.code !== deleting.code))
     setDeleting(null)
+  }
+
+  async function handleBannerSave(input: BannerInput) {
+    setBusy(true)
+    setActionError(null)
+    const res = await saveBanner(input)
+    setBusy(false)
+    if (!res.ok) {
+      setActionError(res.error)
+      return false
+    }
+    setBanner(res.banner)
+    return true
   }
 
   async function handleInfoSave(code: string, detailsBn: string[]) {
@@ -146,7 +177,7 @@ export function Dashboard({ initialTrains }: { initialTrains: TrainDTO[] }) {
         </TabsList>
 
         <TabsContent value="banner" className="min-w-0">
-          <BannerForm banner={banner} onSave={setBanner} />
+          <BannerForm banner={banner} saving={busy} onSave={handleBannerSave} />
         </TabsContent>
 
         <TabsContent value="trains" className="min-w-0">
