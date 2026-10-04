@@ -1,11 +1,11 @@
-import { TRAINS } from "@/lib/data/trains";
-import { toBnDigits } from "@/lib/bn";
-import { ScheduleExplorer } from "@/components/public/home/schedule-explorer";
+import { TRAINS } from "@/lib/data/trains"
+import { toBnDigits } from "@/lib/bn"
+import { ScheduleExplorer } from "@/components/public/home/schedule-explorer"
 
 export const metadata = {
   title: "আজকের সময়সূচি | গৌরীপুর জংশন",
   description: "গৌরীপুর জংশন থেকে ছাড়ে এমন সব ট্রেনের সময়সূচি",
-};
+}
 
 export default function Page() {
   return (
@@ -20,5 +20,5 @@ export default function Page() {
 
       <ScheduleExplorer />
     </main>
-  );
+  )
 }

@@ -1,34 +1,18 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import type { Metadata } from "next"
 
-import { logoutAction } from "./actions";
+import { Dashboard } from "@/components/private/dashboard/dashboard"
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Admin Dashboard - Gouripur Junction",
-};
+  description: "Manage banner, trains, schedules and post approvals.",
+}
 
 export default function AdminDashboardPage() {
   return (
-    <main className="flex min-h-svh items-center justify-center p-6">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="heading-2">Dashboard</CardTitle>
-          <CardDescription>You are signed in as admin.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form action={logoutAction}>
-            <Button type="submit" variant="outline" className="w-full">
-              Logout
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+    <main className="max-body py-6">
+      <section aria-label="Admin dashboard">
+        <Dashboard />
+      </section>
     </main>
-  );
+  )
 }
