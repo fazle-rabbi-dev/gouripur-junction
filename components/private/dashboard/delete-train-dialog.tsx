@@ -3,14 +3,16 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-import type { Train } from "@/@types/admin";
+import type { TrainDTO } from "@/lib/types/train";
 
 export function DeleteTrainDialog({
   train,
+  saving,
   onClose,
   onConfirm,
 }: {
-  train: Train | null;
+  train: TrainDTO | null;
+  saving?: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }) {
@@ -24,15 +26,15 @@ export function DeleteTrainDialog({
           <div>
             <p className="heading-5">ট্রেন মুছবেন?</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              কোড {train?.code} স্থায়ীভাবে মুছে যাবে।
+              কোড {train?.codeBn ?? train?.code} স্থায়ীভাবে মুছে যাবে।
             </p>
           </div>
           <div className="grid w-full grid-cols-2 gap-2">
-            <Button variant="outline" onClick={onClose}>
+            <Button variant="outline" onClick={onClose} disabled={saving}>
               বাতিল
             </Button>
-            <Button variant="destructive" onClick={onConfirm}>
-              হ্যাঁ, মুছুন
+            <Button variant="destructive" onClick={onConfirm} disabled={saving}>
+              {saving ? "মুছছে..." : "হ্যাঁ, মুছুন"}
             </Button>
           </div>
         </div>

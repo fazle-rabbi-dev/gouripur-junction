@@ -9,35 +9,49 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
-import type { Train } from "@/@types/admin";
-import { ROUTES, TRAIN_TYPES } from "@/constants/admin-mock";
+import type { TrainDTO, TrainType } from "@/lib/types/train";
 
 interface Props {
   open: boolean;
-  editing: Train | null;
+  editing: TrainDTO | null;
+  saving?: boolean;
   onClose: () => void;
-  onSave: (t: Train, isNew: boolean) => void;
+  onSave: (t: TrainDTO, isNew: boolean) => void;
 }
 
-const empty: Train = {
+const TRAIN_TYPES: { value: TrainType; label: string }[] = [
+  { value: "intercity", label: "আন্তঃনগর" },
+  { value: "local", label: "লোকাল" },
+  { value: "commuter", label: "কমিউটার" },
+];
+
+const empty: TrainDTO = {
+  _id: "",
   code: "",
-  name: "",
-  type: "Local",
-  route: ROUTES[0],
-  arrival: "08:00",
-  departure: "08:05",
-  offDay: "বন্ধ নেই",
-  description: "",
+  codeBn: "",
+  nameBn: "",
+  type: "local",
+  typeBn: "লোকাল",
+  routeBn: "",
+  fromBn: "",
+  toBn: "",
+  arrivalBn: "",
+  departureBn: "",
+  offDayBn: "বন্ধ নেই",
+  infoBn: "",
+  detailsBn: [],
+  createdAt: "",
+  updatedAt: "",
 };
 
-export function TrainDialog({ open, editing, onClose, onSave }: Props) {
-  const [form, setForm] = useState<Train>(empty);
+export function TrainDialog({ open, editing, saving, onClose, onSave }: Props) {
+  const [form, setForm] = useState<TrainDTO>(empty);
 
   useEffect(() => {
     if (open) setForm(editing ?? empty);
   }, [open, editing]);
 
-  const updateForm = (patch: Partial<Train>) => setForm((f) => ({ ...f, ...patch }));
+  const updateForm = (patch: Partial<TrainDTO>) => setForm((f) => ({ ...f, ...patch }));
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
@@ -58,9 +72,18 @@ export function TrainDialog({ open, editing, onClose, onSave }: Props) {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="t-name">Name</Label>
-              <Input id="t-name" value={form.name} onChange={(e) => updateForm({ name: e.target.value })} />
+              <Label htmlFor="t-codebn">Code (Bn)</Label>
+              <Input
+                id="t-codebn"
+                value={form.codeBn}
+                onChange={(e) => updateForm({ codeBn: e.target.value })}
+              />
             </div>
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="t-name">Name (Bn)</Label>
+            <Input id="t-name" value={form.nameBn} onChange={(e) => updateForm({ nameBn: e.target.value })} />
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -69,28 +92,28 @@ export function TrainDialog({ open, editing, onClose, onSave }: Props) {
               <NativeSelect
                 id="t-type"
                 value={form.type}
-                onChange={(e) => updateForm({ type: e.target.value as Train["type"] })}
+                onChange={(e) => {
+                  const type = e.target.value as TrainType;
+                  updateForm({
+                    type,
+                    typeBn: TRAIN_TYPES.find((t) => t.value === type)?.label ?? type,
+                  });
+                }}
               >
                 {TRAIN_TYPES.map((t) => (
-                  <NativeSelectOption key={t} value={t}>
-                    {t}
+                  <NativeSelectOption key={t.value} value={t.value}>
+                    {t.label}
                   </NativeSelectOption>
                 ))}
               </NativeSelect>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="t-route">Route</Label>
-              <NativeSelect
+              <Label htmlFor="t-route">Route (Bn)</Label>
+              <Input
                 id="t-route"
-                value={form.route}
-                onChange={(e) => updateForm({ route: e.target.value })}
-              >
-                {ROUTES.map((r) => (
-                  <NativeSelectOption key={r} value={r}>
-                    {r}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
+                value={form.routeBn}
+                onChange={(e) => updateForm({ routeBn: e.target.value })}
+              />
             </div>
           </div>
 
@@ -99,33 +122,31 @@ export function TrainDialog({ open, editing, onClose, onSave }: Props) {
               <Label htmlFor="t-arr">Arrival at Gouripur</Label>
               <Input
                 id="t-arr"
-                type="time"
-                value={form.arrival}
-                onChange={(e) => updateForm({ arrival: e.target.value })}
+                value={form.arrivalBn}
+                onChange={(e) => updateForm({ arrivalBn: e.target.value })}
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="t-dep">Departure</Label>
               <Input
                 id="t-dep"
-                type="time"
-                value={form.departure}
-                onChange={(e) => updateForm({ departure: e.target.value })}
+                value={form.departureBn}
+                onChange={(e) => updateForm({ departureBn: e.target.value })}
               />
             </div>
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="t-off">Off day</Label>
-            <Input id="t-off" value={form.offDay ?? ""} onChange={(e) => updateForm({ offDay: e.target.value })} />
+            <Input id="t-off" value={form.offDayBn ?? ""} onChange={(e) => updateForm({ offDayBn: e.target.value })} />
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="t-desc">Description (for Train info)</Label>
             <Textarea
               id="t-desc"
-              value={form.description ?? ""}
-              onChange={(e) => updateForm({ description: e.target.value })}
+              value={form.infoBn ?? ""}
+              onChange={(e) => updateForm({ infoBn: e.target.value })}
             />
           </div>
         </div>
@@ -136,9 +157,10 @@ export function TrainDialog({ open, editing, onClose, onSave }: Props) {
           </Button>
           <Button
             className="bg-green-800 text-white hover:bg-green-700"
+            disabled={saving}
             onClick={() => onSave(form, !editing)}
           >
-            Save
+            {saving ? "Saving..." : "Save"}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState } from "react";
 import { Info, LayoutGrid, Megaphone, MessagesSquare } from "lucide-react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-import { useAdminData } from "@/hooks/use-admin-data"
-import type { Train } from "@/@types/admin"
+import { addTrain, deleteTrain, updateTrain } from "@/lib/actions/trains";
+import { useAdminData } from "@/hooks/use-admin-data";
+import type { TrainDTO, TrainInput } from "@/lib/types/train";
 import { AdminHeader } from "./admin-header"
 import { AdminStats } from "./admin-stats"
 import { BannerForm } from "./banner-form"
@@ -16,15 +17,88 @@ import { TrainDialog } from "./train-dialog"
 import { TrainInfoForm } from "./train-info-form"
 import { TrainsTable } from "./trains-table"
 
-export function Dashboard() {
-  const { trains, setTrains, banner, setBanner, posts, setPosts } =
-    useAdminData()
+// Form carries DB meta fields - strip them before sending to actions.
+function toInput(t: TrainDTO): TrainInput {
+  return {
+    code: t.code,
+    codeBn: t.codeBn,
+    nameBn: t.nameBn,
+    type: t.type,
+    typeBn: t.typeBn,
+    routeBn: t.routeBn,
+    fromBn: t.fromBn,
+    toBn: t.toBn,
+    arrivalBn: t.arrivalBn,
+    departureBn: t.departureBn,
+    offDayBn: t.offDayBn,
+    infoBn: t.infoBn,
+    detailsBn: t.detailsBn ?? [],
+  };
+}
+
+export function Dashboard({ initialTrains }: { initialTrains: TrainDTO[] }) {
+  // Banner + posts still come from local mock hook; trains come from DB.
+  const { banner, setBanner, posts, setPosts } = useAdminData();
+  const [trains, setTrains] = useState<TrainDTO[]>(initialTrains);
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<Train | null>(null)
-  const [deleting, setDeleting] = useState<Train | null>(null)
+  const [editing, setEditing] = useState<TrainDTO | null>(null)
+  const [deleting, setDeleting] = useState<TrainDTO | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const pending = posts.filter((p) => p.status === "pending").length
   const approved = posts.filter((p) => p.status === "approved").length
+
+  async function handleSave(t: TrainDTO, isNew: boolean) {
+    setBusy(true)
+    setActionError(null)
+    const res = isNew
+      ? await addTrain(toInput(t))
+      : await updateTrain(t.code, toInput(t))
+    setBusy(false)
+    if (!res.ok) {
+      setActionError(res.error)
+      return
+    }
+    if (res.train) {
+      setTrains((prev) =>
+        isNew
+          ? [...prev, res.train!]
+          : prev.map((x) => (x.code === res.train!.code ? res.train! : x))
+      )
+    }
+    setDialogOpen(false)
+    setEditing(null)
+  }
+
+  async function handleDeleteConfirm() {
+    if (!deleting) return
+    setBusy(true)
+    setActionError(null)
+    const res = await deleteTrain(deleting.code)
+    setBusy(false)
+    if (!res.ok) {
+      setActionError(res.error)
+      return
+    }
+    setTrains((prev) => prev.filter((t) => t.code !== deleting.code))
+    setDeleting(null)
+  }
+
+  async function handleInfoSave(code: string, detailsBn: string[]) {
+    setActionError(null)
+    const res = await updateTrain(code, { detailsBn })
+    if (!res.ok) {
+      setActionError(res.error)
+      return false
+    }
+    if (res.train) {
+      setTrains((prev) =>
+        prev.map((t) => (t.code === code ? res.train! : t))
+      )
+    }
+    return true
+  }
 
   return (
     <div className="grid min-w-0 gap-4">
@@ -36,7 +110,23 @@ export function Dashboard() {
         bannerActive={banner.active}
       />
 
-      <Tabs defaultValue="banner" className="w-full min-w-0">
+      {actionError && (
+        <p
+          role="alert"
+          className="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive"
+        >
+          {actionError}
+          <button
+            type="button"
+            onClick={() => setActionError(null)}
+            className="ml-2 underline"
+          >
+            বন্ধ করুন
+          </button>
+        </p>
+      )}
+
+      <Tabs defaultValue="trains" className="w-full min-w-0">
         <TabsList
           variant="line"
           className="mb-4 w-full max-w-full justify-start overflow-x-auto"
@@ -90,43 +180,26 @@ export function Dashboard() {
         </TabsContent>
 
         <TabsContent value="info" className="min-w-0">
-          <TrainInfoForm
-            trains={trains}
-            onSave={(code, description) =>
-              setTrains(
-                trains.map((t) => (t.code === code ? { ...t, description } : t))
-              )
-            }
-          />
+          <TrainInfoForm trains={trains} onSave={handleInfoSave} />
         </TabsContent>
       </Tabs>
 
       <TrainDialog
         open={dialogOpen}
         editing={editing}
+        saving={busy}
         onClose={() => {
           setDialogOpen(false)
           setEditing(null)
         }}
-        onSave={(t, isNew) => {
-          setTrains(
-            isNew
-              ? [...trains, t]
-              : trains.map((x) => (x.code === t.code ? t : x))
-          )
-          setDialogOpen(false)
-          setEditing(null)
-        }}
+        onSave={handleSave}
       />
 
       <DeleteTrainDialog
         train={deleting}
+        saving={busy}
         onClose={() => setDeleting(null)}
-        onConfirm={() => {
-          if (deleting)
-            setTrains(trains.filter((t) => t.code !== deleting.code))
-          setDeleting(null)
-        }}
+        onConfirm={handleDeleteConfirm}
       />
     </div>
   )
