@@ -55,7 +55,7 @@ export function TrainDialog({ open, editing, saving, onClose, onSave }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-lg p-0">
+      <DialogContent className="p-0 sm:max-w-xl">
         <DialogHeader className="border-b p-4">
           <DialogTitle className="heading-5">{editing ? "Edit train" : "Add train"}</DialogTitle>
         </DialogHeader>
@@ -151,7 +151,7 @@ export function TrainDialog({ open, editing, saving, onClose, onSave }: Props) {
           </div>
         </div>
 
-        <DialogFooter className="p-4">
+        <DialogFooter className="border-t p-4 pb-6">
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
