@@ -1,25 +1,25 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Search, TrainFront } from "lucide-react";
+import { useState } from "react"
+import { Search, TrainFront } from "lucide-react"
 
-import type { Train } from "@/lib/types/train";
-import { toBnDigits } from "@/lib/bn";
+import type { Train } from "@/lib/types/train"
+import { toBnDigits } from "@/lib/bn"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { TrainCard } from "./train-card";
+} from "@/components/ui/select"
+import { TrainCard } from "./train-card"
 
 const TYPE_OPTIONS = [
   { value: "all", label: "সব ধরন" },
   { value: "intercity", label: "আন্তঃনগর" },
   { value: "local", label: "লোকাল" },
   { value: "commuter", label: "কমিউটার" },
-] as const;
+] as const
 
 const ROUTE_OPTIONS = [
   { value: "all", label: "সব রুট" },
@@ -28,23 +28,23 @@ const ROUTE_OPTIONS = [
   { value: "মোহনগঞ্জ", label: "গৌরীপুর → মোহনগঞ্জ" },
   { value: "চট্টগ্রাম", label: "গৌরীপুর → চট্টগ্রাম" },
   { value: "ভৈরব", label: "গৌরীপুর → ভৈরব" },
-] as const;
+] as const
 
 export function ScheduleExplorer({ trains }: { trains: Train[] }) {
-  const [input, setInput] = useState("");
-  const [query, setQuery] = useState("");
-  const [type, setType] = useState<string>("all");
-  const [route, setRoute] = useState<string>("all");
+  const [input, setInput] = useState("")
+  const [query, setQuery] = useState("")
+  const [type, setType] = useState<string>("all")
+  const [route, setRoute] = useState<string>("all")
 
-  const q = query.trim();
+  const q = query.trim()
 
   const filtered = trains.filter((t) => {
-    if (type !== "all" && t.type !== type) return false;
-    if (route !== "all" && t.toBn !== route) return false;
-    if (!q) return true;
-    const hay = `${t.code} ${t.codeBn} ${t.nameBn} ${t.routeBn} ${t.fromBn} ${t.toBn}`;
-    return hay.includes(q);
-  });
+    if (type !== "all" && t.type !== type) return false
+    if (route !== "all" && t.toBn !== route) return false
+    if (!q) return true
+    const hay = `${t.code} ${t.codeBn} ${t.nameBn} ${t.routeBn} ${t.fromBn} ${t.toBn}`
+    return hay.includes(q)
+  })
 
   return (
     <div className="flex flex-col gap-5">
@@ -52,8 +52,8 @@ export function ScheduleExplorer({ trains }: { trains: Train[] }) {
       <form
         role="search"
         onSubmit={(e) => {
-          e.preventDefault();
-          setQuery(input);
+          e.preventDefault()
+          setQuery(input)
         }}
         className="flex-center gap-2 rounded-xl border border-border bg-card p-2 pl-4"
       >
@@ -61,12 +61,12 @@ export function ScheduleExplorer({ trains }: { trains: Train[] }) {
         <input
           value={input}
           onChange={(e) => {
-            setInput(e.target.value);
-            if (e.target.value === "") setQuery("");
+            setInput(e.target.value)
+            if (e.target.value === "") setQuery("")
           }}
-          placeholder="কোড, নাম বা রুট লিখুন — যেমন ৭৩৫ বা চট্টগ্রাম"
+          placeholder="কোড, নাম বা রুট লিখুন"
           aria-label="ট্রেন খুঁজুন"
-          className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-xs placeholder:text-muted-foreground"
         />
         <button
           type="submit"
@@ -136,5 +136,5 @@ export function ScheduleExplorer({ trains }: { trains: Train[] }) {
         </p>
       )}
     </div>
-  );
+  )
 }

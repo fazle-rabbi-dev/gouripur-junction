@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Calendar, Info, MessageCircle, UserCog } from "lucide-react";
+import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Calendar, Info, MessageCircle, UserCog } from "lucide-react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 const ITEMS = [
   { href: "/", label: "সময়সূচি", Icon: Calendar },
   { href: "/trains", label: "ট্রেনের তথ্য", Icon: Info },
   { href: "/posts", label: "পোস্ট", Icon: MessageCircle },
   { href: "/admin/login", label: "অ্যাডমিন", Icon: UserCog },
-];
+]
 
 export function DesktopSidebar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   return (
     <aside className="sticky top-0 hidden h-svh w-72 shrink-0 flex-col border-r border-border bg-card md:flex">
       {/* Brand */}
       <div className="flex-center gap-3 border-b border-border px-4 py-5">
         <Image
-          src="/logo.png"
+          src="/android-chrome-192x192.png"
           alt="গৌরীপুর জংশন লোগো"
           width={48}
           height={48}
@@ -40,7 +40,7 @@ export function DesktopSidebar() {
           {ITEMS.map(({ href, label, Icon }) => {
             const active =
               pathname === href ||
-              (href.startsWith("/admin") && pathname.startsWith("/admin"));
+              (href.startsWith("/admin") && pathname.startsWith("/admin"))
             return (
               <li key={href}>
                 <Link
@@ -50,14 +50,14 @@ export function DesktopSidebar() {
                     "flex-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors",
                     active
                       ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   )}
                 >
                   <Icon className="size-5" />
                   <span>{label}</span>
                 </Link>
               </li>
-            );
+            )
           })}
         </ul>
       </nav>
@@ -67,5 +67,5 @@ export function DesktopSidebar() {
         <p className="text-xs text-muted-foreground">Gouripur Junction •</p>
       </div>
     </aside>
-  );
+  )
 }
