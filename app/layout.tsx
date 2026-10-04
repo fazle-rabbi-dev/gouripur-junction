@@ -1,12 +1,14 @@
 import { Atkinson_Hyperlegible, Geist_Mono } from "next/font/google"
+import { Suspense } from "react"
+import { cn } from "@/lib/utils"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { DesktopSidebar } from "@/components/shared/desktop-sidebar"
 import { MobileNav } from "@/components/shared/mobile-nav"
 import { UrgentBannerSlot } from "@/components/shared/urgent-banner-slot"
-import { cn } from "@/lib/utils"
-import { Suspense } from "react"
+import { RouteProgress } from "@/components/shared/route-progress"
+import { UrgentBanner } from "@/components/shared/urgent-banner"
 
 const fontSans = Atkinson_Hyperlegible({
   subsets: ["latin"],
@@ -37,6 +39,9 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
+          <Suspense fallback={null}>
+            <RouteProgress />
+          </Suspense>
           <div className="min-h-svh md:flex">
             <DesktopSidebar />
             <div className="min-w-0 flex-1 pb-20 md:pb-0">

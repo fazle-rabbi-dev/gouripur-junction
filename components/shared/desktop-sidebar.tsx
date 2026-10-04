@@ -35,7 +35,9 @@ export function DesktopSidebar() {
       <nav aria-label="ডেস্কটপ নেভিগেশন" className="flex-1 p-3">
         <ul className="flex flex-col gap-1">
           {ITEMS.map(({ href, label, Icon }) => {
-            const active = pathname === href;
+            const active =
+              pathname === href ||
+              (href.startsWith("/admin") && pathname.startsWith("/admin"));
             return (
               <li key={href}>
                 <Link
