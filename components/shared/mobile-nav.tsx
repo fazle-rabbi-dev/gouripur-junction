@@ -31,7 +31,9 @@ export function MobileNav() {
     >
       <ul className="grid grid-cols-5">
         {ITEMS.map(({ href, label, Icon }) => {
-          const active = pathname === href;
+          const active =
+            pathname === href ||
+            (href.startsWith("/admin") && pathname.startsWith("/admin"));
           return (
             <li key={href}>
               <Link
