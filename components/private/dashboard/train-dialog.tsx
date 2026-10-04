@@ -156,7 +156,6 @@ export function TrainDialog({ open, editing, saving, onClose, onSave }: Props) {
             Cancel
           </Button>
           <Button
-            className="bg-green-800 text-white hover:bg-green-700"
             disabled={saving}
             onClick={() => onSave(form, !editing)}
           >

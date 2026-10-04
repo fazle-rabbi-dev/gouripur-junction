@@ -41,7 +41,6 @@ export function ModerationQueue({
                 <Button
                   size="sm"
                   onClick={() => onApprove(p.id)}
-                  className="bg-green-800 text-white hover:bg-green-700"
                 >
                   Approve
                 </Button>

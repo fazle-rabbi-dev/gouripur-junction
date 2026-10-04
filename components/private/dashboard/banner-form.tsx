@@ -88,7 +88,6 @@ export function BannerForm({
               setTimeout(() => setSaved(false), 1500);
             }}
             disabled={saving}
-            className="bg-green-800 text-white hover:bg-green-700"
           >
             {saving ? "Saving..." : saved ? "Saved" : "Save banner"}
           </Button>

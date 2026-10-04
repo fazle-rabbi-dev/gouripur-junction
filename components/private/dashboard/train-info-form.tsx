@@ -110,7 +110,6 @@ export function TrainInfoForm({
                 <div className="flex items-center gap-2">
                   <Button
                     size="sm"
-                    className="bg-green-800 text-white hover:bg-green-700"
                     onClick={async () => {
                       const ok = await onSave(t.code, bullets);
                       if (!ok) return;

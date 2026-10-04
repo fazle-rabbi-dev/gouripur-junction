@@ -21,7 +21,6 @@ export function TrainsTable({
         <h2 className="heading-6">Trains ({trains.length})</h2>
         <Button
           onClick={onAdd}
-          className="bg-green-800 text-white hover:bg-green-700"
           size="sm"
         >
           + Add train
