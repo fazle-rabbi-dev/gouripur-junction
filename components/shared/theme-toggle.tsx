@@ -6,13 +6,35 @@ import { Moon, Sun } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({
+  className,
+  iconOnly = false,
+}: {
+  className?: string;
+  iconOnly?: boolean;
+}) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
   const isDark = mounted && resolvedTheme === "dark";
+
+  if (iconOnly) {
+    return (
+      <button
+        type="button"
+        onClick={() => setTheme(isDark ? "light" : "dark")}
+        aria-label={isDark ? "লাইট থিমে বদলান" : "ডার্ক থিমে বদলান"}
+        className={cn(
+          "flex-center size-10 shrink-0 justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+          className,
+        )}
+      >
+        {isDark ? <Sun className="size-5" /> : <Moon className="size-5" />}
+      </button>
+    );
+  }
 
   return (
     <button
