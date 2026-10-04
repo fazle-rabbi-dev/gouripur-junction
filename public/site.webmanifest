@@ -1,0 +1,21 @@
+{
+  "name": "Gouripur Junction - গৌরীপুর জংশন",
+  "short_name": "Gouripur Jn",
+  "description": "Gouripur Junction train schedule, train info and community posts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0e4c7e",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
