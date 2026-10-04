@@ -23,7 +23,7 @@ export function UrgentBanner() {
         <span aria-hidden className="absolute inset-y-0 left-0 w-1 bg-red-500" />
 
         <div className="flex items-center gap-3 py-3 pr-3 pl-5">
-          <span className="flex-center size-10 shrink-0 self-center rounded-full bg-red-500/15 text-red-500">
+          <span className="flex-center justify-center size-10 shrink-0 self-center rounded-full bg-red-500/15 text-red-500">
             <Siren className="size-5" />
           </span>
 
@@ -41,7 +41,7 @@ export function UrgentBanner() {
             type="button"
             onClick={() => setDismissed(true)}
             aria-label="ব্যানার বন্ধ করুন"
-            className="flex-center size-8 shrink-0 self-center rounded-full border border-border text-muted-foreground hover:text-foreground"
+            className="flex-center justify-center size-8 shrink-0 self-center rounded-full border border-border text-muted-foreground hover:text-foreground"
           >
             <X className="size-4" />
           </button>
