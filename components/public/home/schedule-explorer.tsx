@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Search, TrainFront } from "lucide-react";
 
-import { TRAINS } from "@/lib/data/trains";
+import type { Train } from "@/lib/types/train";
 import { toBnDigits } from "@/lib/bn";
 import {
   Select,
@@ -30,7 +30,7 @@ const ROUTE_OPTIONS = [
   { value: "ভৈরব", label: "গৌরীপুর → ভৈরব" },
 ] as const;
 
-export function ScheduleExplorer() {
+export function ScheduleExplorer({ trains }: { trains: Train[] }) {
   const [input, setInput] = useState("");
   const [query, setQuery] = useState("");
   const [type, setType] = useState<string>("all");
@@ -38,7 +38,7 @@ export function ScheduleExplorer() {
 
   const q = query.trim();
 
-  const filtered = TRAINS.filter((t) => {
+  const filtered = trains.filter((t) => {
     if (type !== "all" && t.type !== type) return false;
     if (route !== "all" && t.toBn !== route) return false;
     if (!q) return true;
