@@ -1,22 +1,26 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import Link from "next/link";
+import Image from "next/image"
+import Link from "next/link"
 
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle } from "./theme-toggle"
 
 export function AppHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-md md:hidden">
       <div className="flex-center justify-between gap-3 px-4 py-2.5 sm:px-6">
-        <Link href="/" className="flex-center min-w-0 gap-2.5" aria-label="গৌরীপুর জংশন - হোম">
+        <Link
+          href="/"
+          className="flex-center min-w-0 gap-2.5"
+          aria-label="গৌরীপুর জংশন - হোম"
+        >
           <Image
-            src="/logo.png"
+            src="/android-chrome-192x192.png"
             alt="গৌরীপুর জংশন লোগো"
             width={48}
             height={48}
             priority
-            className="size-12 shrink-0 rounded-xl object-cover"
+            className="size-9 shrink-0 rounded-xl object-cover"
           />
           <span className="min-w-0">
             <span className="block truncate text-base leading-tight font-bold">
@@ -31,5 +35,5 @@ export function AppHeader() {
         <ThemeToggle iconOnly />
       </div>
     </header>
-  );
+  )
 }
