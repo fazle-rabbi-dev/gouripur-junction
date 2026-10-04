@@ -20,5 +20,11 @@ export async function UrgentBannerSlot() {
 
   const until = `until ${new Date(banner.expiresAt).toLocaleString()}`
 
-  return <UrgentBanner message={banner.message} until={until} />
+  return (
+    <UrgentBanner
+      id={`${banner._id}-${banner.updatedAt}`}
+      message={banner.message}
+      until={until}
+    />
+  )
 }

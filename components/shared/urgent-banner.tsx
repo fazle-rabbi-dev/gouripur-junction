@@ -1,10 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Siren, X } from "lucide-react";
 
-export function UrgentBanner({ message, until }: { message: string; until: string }) {
+const DISMISS_KEY = "gj-banner-dismissed";
+
+// Dismiss is stored per banner id (id changes on new/edited banner),
+// so closing hides it until expiry, but a fresh banner shows again.
+export function UrgentBanner({
+  id,
+  message,
+  until,
+}: {
+  id: string;
+  message: string;
+  until: string;
+}) {
   const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    try {
+      setDismissed(localStorage.getItem(DISMISS_KEY) === id);
+    } catch {
+      // storage unavailable - show banner
+    }
+  }, [id]);
 
   if (dismissed) return null;
 
@@ -34,7 +54,14 @@ export function UrgentBanner({ message, until }: { message: string; until: strin
 
           <button
             type="button"
-            onClick={() => setDismissed(true)}
+            onClick={() => {
+              try {
+                localStorage.setItem(DISMISS_KEY, id);
+              } catch {
+                // storage unavailable - hide for this session only
+              }
+              setDismissed(true);
+            }}
             aria-label="ব্যানার বন্ধ করুন"
             className="flex-center size-8 shrink-0 self-center rounded-full border border-border text-muted-foreground hover:text-foreground"
           >
