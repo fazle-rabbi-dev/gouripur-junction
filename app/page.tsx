@@ -1,19 +1,24 @@
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Gouripur Junction",
+  description: "Train schedules and info for Gouripur Junction.",
+};
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
-    </div>
-  )
+    <main className="max-body py-6">
+      <section aria-label="Home">
+        <h1 className="heading-4">Gouripur Junction</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Public homepage coming soon. Admins continue to{" "}
+          <Link href="/admin/dashboard" className="underline">
+            dashboard
+          </Link>
+          .
+        </p>
+      </section>
+    </main>
+  );
 }
