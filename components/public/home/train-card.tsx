@@ -41,7 +41,13 @@ export function TrainCard({ train }: { train: Train }) {
           <span className="size-1.5 rounded-full bg-primary" />
           {train.fromBn}
         </span>
-        <MoveRight className="size-4 shrink-0 text-muted-foreground" />
+        <span aria-hidden className="flex min-w-16 flex-1 items-center gap-1">
+          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-primary/60" />
+          <span className="flex-center justify-center size-6 shrink-0 rounded-full bg-primary/15 text-primary shadow-[0_0_10px_var(--primary)/30]">
+            <MoveRight className="size-3.5" />
+          </span>
+          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-primary/60" />
+        </span>
         <span className="font-medium">{train.toBn}</span>
       </div>
 
