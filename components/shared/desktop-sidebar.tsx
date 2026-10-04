@@ -1,11 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, Info, MessageCircle, TrainFront, UserCog } from "lucide-react";
+import { Calendar, Info, MessageCircle, UserCog } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { ThemeToggle } from "./theme-toggle";
 
 const ITEMS = [
   { href: "/", label: "সময়সূচি", Icon: Calendar },
@@ -21,12 +21,15 @@ export function DesktopSidebar() {
     <aside className="sticky top-0 hidden h-svh w-72 shrink-0 flex-col border-r border-border bg-card md:flex">
       {/* Brand */}
       <div className="flex-center gap-3 border-b border-border px-4 py-5">
-        <span className="flex-center size-10 shrink-0 rounded-lg bg-primary text-primary-foreground">
-          <TrainFront className="size-6" />
-        </span>
+        <Image
+          src="/logo.png"
+          alt="গৌরীপুর জংশন লোগো"
+          width={48}
+          height={48}
+          className="size-12 shrink-0 rounded-xl object-cover"
+        />
         <div className="min-w-0 flex-1">
           <p className="text-lg leading-tight font-bold">গৌরীপুর জংশন</p>
-          <p className="text-xs text-muted-foreground">Gouripur Junction •</p>
           <p className="text-xs text-muted-foreground">স্থাপিত ১৯১২</p>
         </div>
       </div>
@@ -59,9 +62,9 @@ export function DesktopSidebar() {
         </ul>
       </nav>
 
-      {/* Theme */}
-      <div className="border-t border-border p-3">
-        <ThemeToggle className="w-full" />
+      {/* Footer */}
+      <div className="border-t border-border p-4">
+        <p className="text-xs text-muted-foreground">Gouripur Junction •</p>
       </div>
     </aside>
   );
