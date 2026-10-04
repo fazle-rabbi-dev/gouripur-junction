@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google"
+import { Atkinson_Hyperlegible, Geist_Mono } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -8,7 +8,11 @@ import { UrgentBannerSlot } from "@/components/shared/urgent-banner-slot"
 import { cn } from "@/lib/utils"
 import { Suspense } from "react"
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
+const fontSans = Atkinson_Hyperlegible({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-sans",
+})
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -28,7 +32,7 @@ export default function RootLayout({
         "antialiased",
         fontMono.variable,
         "font-sans",
-        geist.variable
+        fontSans.variable
       )}
     >
       <body>
