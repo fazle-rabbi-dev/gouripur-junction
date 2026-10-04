@@ -1,23 +1,10 @@
 // Mock data for schedule + train info, Bengali UI
 // Source: screenshot provided by user. 11 trains total.
+// Types live in @/lib/types/train - re-exported here for backward compatibility.
 
-export type TrainType = "intercity" | "local" | "commuter";
+export type { Train, TrainDTO, TrainFilter, TrainInput, TrainQueryOptions, TrainSortKey, TrainType, TrainTypeBn } from "@/lib/types/train";
 
-export interface Train {
-  code: string; // "735" - for search
-  codeBn: string; // "৭৩৫" - for display
-  nameBn: string; // "বিজয় এক্সপ্রেস"
-  type: TrainType;
-  typeBn: string; // "আন্তঃনগর" | "লোকাল" | "কমিউটার"
-  routeBn: string; // "গৌরীপুর ↔ চট্টগ্রাম"
-  fromBn: string;
-  toBn: string;
-  arrivalBn: string; // গৌরীপুর পৌঁছায়
-  departureBn: string; // ছাড়ে
-  offDayBn: string; // "বন্ধ নেই" | "বুধবার" | "শুক্রবার"
-  infoBn: string; // generic train info (short description)
-  detailsBn: string[]; // bullet-point train details for info page
-}
+import type { Train } from "@/lib/types/train";
 
 export const TRAINS: Train[] = [
   {

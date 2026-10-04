@@ -9,4 +9,5 @@ export const env = {
   ADMIN_USERNAME: required("ADMIN_USERNAME", "admin"),
   ADMIN_PASSWORD: required("ADMIN_PASSWORD", "admin"),
   JWT_SECRET: required("JWT_SECRET", "dev-only-secret-change-me"),
+  MONGODB_URI: required("MONGODB_URI", "mongodb://127.0.0.1:27017/gouripur-junction"),
 };
