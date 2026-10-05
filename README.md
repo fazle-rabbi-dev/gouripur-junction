@@ -1,21 +1,34 @@
-# Next.js template
+# Gouripur Junction - গৌরীপুর জংশন
 
-This is a Next.js template with shadcn/ui.
+Train schedule, train info and community posts for Gouripur Junction railway station (est. 1912).
 
-## Adding components
+> 🌐 **Live**: [https://gouripur-junction.vercel.app/](https://gouripur-junction.vercel.app/)
 
-To add components to your app, run the following command:
+## Features
+
+- Schedule (home) - searchable by train code, name, route
+- Train info
+- Post feed - admin posts directly, public posts need admin approval
+- Admin login (JWT in httpOnly cookies, refresh via middleware)
+
+## Tech
+
+Next.js 16, React 19, TailwindCSS + ShadCN, Mongoose, `jose` for JWT.
+
+## Run
 
 ```bash
-npx shadcn@latest add button
+bun install
+bun dev
 ```
 
-This will place the ui components in the `components` directory.
+## Env
 
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button";
+```bash
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin
+JWT_SECRET=change-me
+MONGODB_URI=mongodb://127.0.0.1:27017/gouripur-junction
 ```
+
+Env is accessed only via `lib/env.ts` - never import `process.env` directly.
