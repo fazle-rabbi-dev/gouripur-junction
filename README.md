@@ -1,8 +1,16 @@
+<div align="center">
+
 # Gouripur Junction - গৌরীপুর জংশন
 
 Train schedule, train info and community posts for Gouripur Junction railway station (est. 1912).
 
 > 🌐 **Live**: [https://gouripur-junction.vercel.app/](https://gouripur-junction.vercel.app/)
+
+<img src='./public/mockup.png' width='100%' />
+
+🛠️ Built for my `cousin's FB group`: Gouripur-Junction - Railway-Station-Community
+
+</div>
 
 ## Features
 
